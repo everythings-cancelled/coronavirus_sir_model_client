@@ -19,16 +19,19 @@ class Graph extends React.Component {
     render() {
         return(
             <div>
-                <XYPlot
-                    width={300}
-                    height={300}>
-                    <VerticalGridLines />
-                    <HorizontalGridLines />
-                    <XAxis />
-                    <YAxis />
-                    <LineSeries data={this.data}/>
-                </XYPlot>
-            </div>
+            <XYPlot
+                xType="ordinal"
+                width={2000}
+                height={1000}>
+                <VerticalGridLines />
+                <HorizontalGridLines />
+                <XAxis title="X" />
+                <YAxis title="Y" />
+                    <LineSeries
+                        data={this.data}
+                        style={{stroke: 'violet', strokeWidth: 3}}/>
+            </XYPlot>
+        </div>
         )
     }
 }

@@ -20,7 +20,9 @@ class Form extends React.Component {
 
         const defaultRateSi = 0.05
         const defaultRateIr = 0.01
-        const queryString = `?country=${this.state.country}&rateSi=${defaultRateSi}0.05&rateIr=${defaultRateIr}`;
+        const defaultEons = 1000;
+        const queryString = `?country=${this.state.country}&rateSi=${defaultRateSi}0.05&rateIr=${defaultRateIr}&eons=${defaultEons}`;
+        
         const baseProdUrl = "https://coronavirus-sir-model-api.herokuapp.com/v1/sir_model";
         const baseLocalUrl = `http://localhost:4567/v1/sir_model`;
 
@@ -28,6 +30,8 @@ class Form extends React.Component {
         axios.get(url)
         .then((response) => {
           this.setState({points: response.data.points})
+        }).catch(() => {
+          this.setState({ points: [] })
         })
     }
   
