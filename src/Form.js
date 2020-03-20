@@ -26,7 +26,7 @@ class Form extends React.Component {
         const baseProdUrl = "https://coronavirus-sir-model-api.herokuapp.com/v1/sir_model";
         const baseLocalUrl = `http://localhost:4567/v1/sir_model`;
 
-        const url = baseLocalUrl + queryString;
+        const url = baseProdUrl + queryString;
         axios.get(url)
         .then((response) => {
           this.setState({points: response.data.points})
