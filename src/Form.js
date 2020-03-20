@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Graph from './Graph';
 
 class Form extends React.Component {
     constructor(props) {
@@ -24,14 +25,16 @@ class Form extends React.Component {
         const baseLocalUrl = `http://localhost:4567/v1/sir_model`;
 
         const url = baseLocalUrl + queryString;
-        axios.get(url, { 'Access-Control-Allow-Origin': true }).then(function(response) {
-            debugger;
-            this.setState({points: response.data.points})
+        axios.get(url)
+        .then((response) => {
+          this.setState({points: response.data.points})
         })
     }
   
     render() {
       return (
+        <div>
+          { this.state.points.length > 0 && <Graph points={this.state.points} /> }
         <form onSubmit={this.handleSubmit}>
           <label>
             Country:
@@ -39,6 +42,7 @@ class Form extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
+        </div>
       );
     }
 }
