@@ -15,10 +15,10 @@ const InfectionChart = () => {
     { x: 8, y: 35, },
     { x: 9, y: 20, }
   ];
-  // const chartRef = useRef(null);
   const svgRef = useRef(null);
-  const canvasHeight = 400
-  const canvasWidth = 600
+  const canvasHeight = 400;
+  const canvasWidth = 600;
+  const margin = { top: 20, right: 20, bottom: 30, left: 30 }
 
   useEffect(() => {
     drawChart(mockData);
@@ -26,40 +26,37 @@ const InfectionChart = () => {
 
   const drawChart = data => {
     const svg = d3.select(svgRef.current);
-    const scale = 20;
 
     // Draw x-axis
     const xScale = d3.scaleLinear()
       .domain([0, mockData.length-1])
-      .range([30, canvasWidth-20]);
-    const xAxis = d3.axisBottom(xScale)
-      .ticks(mockData.length)
-      .tickFormat(index => index+1);
+      .range([margin.left, canvasWidth - margin.right]);
+    const xAxis = d3.axisBottom(xScale);
     svg.select('.x-axis')
-      .style('transform',` translateY(${canvasHeight-40}px)` )
+      .style('transform',` translateY(${canvasHeight - margin.bottom}px)` )
       .call(xAxis);
 
     // Draw y-axis
     const yScale = d3.scaleLinear()
       .domain([0, Math.max(...mockData.map(item => item.y))])
-      .range([canvasHeight-40, 30]);
+      .range([canvasHeight - margin.bottom, margin.top]);
     const yAxis = d3.axisLeft(yScale);
     svg.select('.y-axis')
-      .style('transform',` translateX(${30}px)` )
+      .style('transform',` translateX(${margin.left}px)` )
       .call(yAxis);
 
     // Draw graph area
     const area = d3.area()
       .x(d => xScale(d.x))
-      .y0(canvasHeight)
+      .y0(canvasHeight - margin.bottom)
       .y1(d => yScale(d.y))
       .curve(d3.curveCardinal);
 
-    // svg.append('path')
-    //   .datum(mockData)
-    //   .attr('fill', 'steelblue')
-    //   .attr('class', 'area')
-    //   .attr('d', area);
+    svg.append('path')
+      .datum(mockData)
+      .attr('fill', 'steelblue')
+      .attr('fill-opacity', '.5')
+      .attr('d', area);
   }
 
   return (
