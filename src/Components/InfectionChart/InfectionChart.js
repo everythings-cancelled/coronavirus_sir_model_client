@@ -15,6 +15,8 @@ const InfectionChart = () => {
     { x: 8, y: 35, },
     { x: 9, y: 20, }
   ];
+  var mockData2 = mockData.map(item => ({x: item.x, y: item.y*.2}));
+
   const svgRef = useRef(null);
   const canvasHeight = 400;
   const canvasWidth = 600;
@@ -45,8 +47,17 @@ const InfectionChart = () => {
       .style('transform',` translateX(${margin.left}px)` )
       .call(yAxis);
 
-    // Draw graph area
-    const area = d3.area()
+    // line for hospital bed
+    svg.append('line')
+      .attr('x1', margin.left)
+      .attr('x2', canvasWidth)
+      .attr('y1', yScale(16))
+      .attr('y2', yScale(16))
+      // .attr('stroke-dasharray', '5')
+      .style('stroke', 'grey');
+
+    // Draw graph all infected area
+    const allInfectedArea = d3.area()
       .x(d => xScale(d.x))
       .y0(canvasHeight - margin.bottom)
       .y1(d => yScale(d.y))
@@ -54,9 +65,24 @@ const InfectionChart = () => {
 
     svg.append('path')
       .datum(mockData)
+      .attr('class', 'all-infected')
       .attr('fill', 'steelblue')
       .attr('fill-opacity', '.5')
-      .attr('d', area);
+      .attr('d', allInfectedArea);
+
+    // Draw graph need hospitalization infected area
+    const hospitalizedInfectedArea = d3.area()
+      .x(d => xScale(d.x))
+      .y0(canvasHeight - margin.bottom)
+      .y1(d => yScale(d.y))
+      .curve(d3.curveCardinal);
+
+    svg.append('path')
+      .datum(mockData2)
+      .attr('class', 'hospitalized-infected')
+      .attr('fill', 'green')
+      .attr('fill-opacity', '.5')
+      .attr('d', allInfectedArea);
   }
 
   return (
