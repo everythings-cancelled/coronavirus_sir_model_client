@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './GraphForm.scss';
 
 const GraphForm = props => {
   const initialValues = {
@@ -21,7 +22,7 @@ const GraphForm = props => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form className="GraphForm" onSubmit={onSubmit}>
       <label htmlFor="country">Country: </label>
       <input id="country" type="text" value={params.country || ''} onChange={e => handleValueChange('country', e.target.value)} />
 

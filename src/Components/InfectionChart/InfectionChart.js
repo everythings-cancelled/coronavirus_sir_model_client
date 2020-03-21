@@ -4,17 +4,17 @@ import * as util from './AreaChartUtil.js';
 import './InfectionChart.scss';
 
 const InfectionChart = ({dataPoints, hospitalCapacity, country}) => {
+  // normalize the data into x and y coordinate
   const infectedData = dataPoints.map(item => ({x: item.eon, y: item.infected}));
+  // almost the same as `infectedData` above, but the y value is at 20%
   const infectedNeedBedData = infectedData.map(item => ({x: item.x, y: item.y*.2}));
+  const svgRef = useRef(null);
+
   console.log(country, dataPoints);
   console.log(country, hospitalCapacity);
 
-  const svgRef = useRef(null);
   useEffect(() => {
-    drawChart(infectedData);
-  }, [infectedData]);
-
-  const drawChart = data => {
+    // === Draw chart ===
     const svg = d3.select(svgRef.current);
     // maximum y-axis data will be either the max value from infected points
     // or hospital capacity, whichever is larger
@@ -32,7 +32,7 @@ const InfectionChart = ({dataPoints, hospitalCapacity, country}) => {
     util.plotArea(svg, scale, infectedNeedBedData, util.HELP_NEEDED, 'green'); // need hospitalization
 
     util.drawHorizontalLine(svg, scale.y, hospitalCapacity, util.HOSPITAL_CAPACITY); // hospital bed capacity
-  }
+  })
 
   return (
     <div className="InfectionChart">
