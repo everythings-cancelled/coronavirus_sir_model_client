@@ -5,7 +5,7 @@ const GraphForm = props => {
     country: 'USA',
     rateSi: .5,
     rateRi: .01,
-    eons: 5
+    eons: 15
   };
   const [params, setFormVal] = useState(initialValues);
 

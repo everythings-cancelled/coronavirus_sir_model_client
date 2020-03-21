@@ -4,15 +4,12 @@ import * as util from './AreaChartUtil.js';
 import './InfectionChart.scss';
 
 const InfectionChart = ({dataPoints, hospitalCapacity, country}) => {
-  var infectedData = dataPoints.map(item => ({x: item.eon, y: item.infected}));
-  var infectedNeedBedData = infectedData.map(item => ({x: item.x, y: item.y*.2}));
+  const infectedData = dataPoints.map(item => ({x: item.eon, y: item.infected}));
+  const infectedNeedBedData = infectedData.map(item => ({x: item.x, y: item.y*.2}));
   console.log(country, dataPoints);
   console.log(country, hospitalCapacity);
-  const svgRef = useRef(null);
-  const canvasHeight = 400;
-  const canvasWidth = 600;
-  const margin = { top: 20, right: 20, bottom: 30, left: 30 }
 
+  const svgRef = useRef(null);
   useEffect(() => {
     drawChart(infectedData);
   }, [infectedData]);
@@ -28,20 +25,23 @@ const InfectionChart = ({dataPoints, hospitalCapacity, country}) => {
       y: util.getYScale(maxYData)
     }
 
-    util.drawXAxis(svg, scale.x);
-    util.drawYAxis(svg, scale.y);
+    util.drawXAxis(svg, scale.x, util.X_AXIS);
+    util.drawYAxis(svg, scale.y, util.Y_AXIS);
 
-    util.plotArea(svg, scale, infectedData, 'steelblue'); // all infected
-    util.plotArea(svg, scale, infectedNeedBedData, 'green'); // need hospitalization
+    util.plotArea(svg, scale, infectedData, util.ALL_INFECTED, 'steelblue'); // all infected
+    util.plotArea(svg, scale, infectedNeedBedData, util.HELP_NEEDED, 'green'); // need hospitalization
 
-    util.drawHorizontalLine(svg, scale.y, hospitalCapacity); // hospital bed capacity
+    util.drawHorizontalLine(svg, scale.y, hospitalCapacity, util.HOSPITAL_CAPACITY); // hospital bed capacity
   }
 
   return (
     <div className="InfectionChart">
-      <svg width={canvasWidth} height={canvasHeight} ref={svgRef}>
-        <g className={util.X_AXIS} />
-        <g className={util.Y_AXIS} />
+      <svg width={util.SVG_WIDTH} height={util.SVG_HEIGHT} ref={svgRef}>
+        <path id={util.ALL_INFECTED} />
+        <path id={util.HELP_NEEDED} />
+        <line id={util.HOSPITAL_CAPACITY} />
+        <g id={util.X_AXIS} />
+        <g id={util.Y_AXIS} />
       </svg>
     </div>
   )
