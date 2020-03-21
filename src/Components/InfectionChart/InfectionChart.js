@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
+import * as util from './AreaChartUtil.js';
 import './InfectionChart.scss';
 
 const InfectionChart = () => {
@@ -28,68 +29,25 @@ const InfectionChart = () => {
 
   const drawChart = data => {
     const svg = d3.select(svgRef.current);
+    const scale = {
+      x: util.getXScale(mockData.length - 1),
+      y: util.getYScale(Math.max(...mockData.map(item => item.y)))
+    }
 
-    // Draw x-axis
-    const xScale = d3.scaleLinear()
-      .domain([0, mockData.length-1])
-      .range([margin.left, canvasWidth - margin.right]);
-    const xAxis = d3.axisBottom(xScale);
-    svg.select('.x-axis')
-      .style('transform',` translateY(${canvasHeight - margin.bottom}px)` )
-      .call(xAxis);
+    util.drawXAxis(svg, scale.x);
+    util.drawYAxis(svg, scale.y);
 
-    // Draw y-axis
-    const yScale = d3.scaleLinear()
-      .domain([0, Math.max(...mockData.map(item => item.y))])
-      .range([canvasHeight - margin.bottom, margin.top]);
-    const yAxis = d3.axisLeft(yScale);
-    svg.select('.y-axis')
-      .style('transform',` translateX(${margin.left}px)` )
-      .call(yAxis);
+    util.plotArea(svg, scale, mockData, 'steelblue'); // all infected
+    util.plotArea(svg, scale, mockData2, 'green'); // need hospitalization
 
-    // line for hospital bed
-    svg.append('line')
-      .attr('x1', margin.left)
-      .attr('x2', canvasWidth)
-      .attr('y1', yScale(16))
-      .attr('y2', yScale(16))
-      // .attr('stroke-dasharray', '5')
-      .style('stroke', 'grey');
-
-    // Draw graph all infected area
-    const allInfectedArea = d3.area()
-      .x(d => xScale(d.x))
-      .y0(canvasHeight - margin.bottom)
-      .y1(d => yScale(d.y))
-      .curve(d3.curveCardinal);
-
-    svg.append('path')
-      .datum(mockData)
-      .attr('class', 'all-infected')
-      .attr('fill', 'steelblue')
-      .attr('fill-opacity', '.5')
-      .attr('d', allInfectedArea);
-
-    // Draw graph need hospitalization infected area
-    const hospitalizedInfectedArea = d3.area()
-      .x(d => xScale(d.x))
-      .y0(canvasHeight - margin.bottom)
-      .y1(d => yScale(d.y))
-      .curve(d3.curveCardinal);
-
-    svg.append('path')
-      .datum(mockData2)
-      .attr('class', 'hospitalized-infected')
-      .attr('fill', 'green')
-      .attr('fill-opacity', '.5')
-      .attr('d', allInfectedArea);
+    util.drawHorizontalLine(svg, scale.y, 16); // hospital bed capacity
   }
 
   return (
     <div className="InfectionChart">
       <svg width={canvasWidth} height={canvasHeight} ref={svgRef}>
-        <g className="x-axis" />
-        <g className="y-axis" />
+        <g className={util.X_AXIS} />
+        <g className={util.Y_AXIS} />
       </svg>
     </div>
   )
