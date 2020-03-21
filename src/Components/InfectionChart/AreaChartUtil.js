@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 const canvasHeight = 400;
 const canvasWidth = 600;
-const margin = { top: 20, right: 20, bottom: 30, left: 30 };
+const margin = { top: 20, right: 20, bottom: 30, left: 50 };
 
 export const X_AXIS = 'x-axis';
 export const Y_AXIS = 'y-axis';

@@ -17,15 +17,14 @@ const Main = () => {
       })
       .then(res => res.json())
       .then(result => {
+        console.log('success', result);
         setFetching(false);
         setData({
           ...result,
           hospitalCapacity: result.population / 10000 * result.hospitalBedsPer10000People
         });
       })
-      .catch((error) => {
-        setFetching(false);
-      });
+      .catch((error) => setFetching(false));
     }
   }, [fetching])
 
@@ -38,12 +37,17 @@ const Main = () => {
     <div className="Main">
       <h1>Coronavirus SIR</h1>
       <GraphForm handleSubmit={handleSubmit} />
-      <InfectionChart />
+
       {data && data.country && (
         <div>
-        <p>Country: {data.country}</p>
-        <p>Population: {data.population}</p>
-        <p>Hospital Bed available: {data.hospitalCapacity}</p>
+          <InfectionChart
+            country={data.country}
+            dataPoints={data.points}
+            hospitalCapacity={data.hospitalCapacity}
+          />
+          <p>Country: {data.country}</p>
+          <p>Population: {data.population}</p>
+          <p>Hospital Bed available: {data.hospitalCapacity}</p>
         </div>
       )}
     </div>
