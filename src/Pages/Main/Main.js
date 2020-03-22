@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import GraphForm from '../../Components/GraphForm/GraphForm';
-import InfectionChart from '../../Components/InfectionChart/InfectionChart';
+import GraphForm from 'Components/GraphForm/GraphForm';
+import InfectionChart from 'Components/InfectionChart/InfectionChart';
 import './Main.scss';
 
 const Main = () => {
@@ -26,7 +26,7 @@ const Main = () => {
       })
       .catch((error) => setFetching(false));
     }
-  }, [fetching])
+  }, [fetching, params])
 
   const handleSubmit = (formValues) => {
     setFetching(true);
