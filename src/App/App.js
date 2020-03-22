@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import Main from 'Pages/Main/Main';
 import GlobalStyles from 'theme/global';
 
